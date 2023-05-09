@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "customs-client", "customs-client.esproj", "{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5A5CC9F-1982-4F1C-8D43-DAAB83CFE8ED}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56E6E331-EDDA-4828-9E75-507675B8217D}
+	EndGlobalSection
+EndGlobal
