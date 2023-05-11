@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './Users/entities/user';
-import { UsersModule } from './Users/Users.module';
+import { User } from './Users/entities/User';
+import { UsersModule } from './Users/users.module';
+import { GraphqlModule } from './graphql/graphql.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,9 +19,10 @@ import { UsersModule } from './Users/Users.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
-    UsersModule
+    UsersModule,
+    GraphqlModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {}3
