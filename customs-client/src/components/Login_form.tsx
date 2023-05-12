@@ -3,6 +3,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import './css/login.css';
 import { useNavigate } from'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 interface LoginProps {
     passData: (data: number) => void;
     initFlag: number
@@ -20,18 +21,32 @@ const Login_form: React.FC<LoginProps> = (props) => {
         const info = (info: string) => {
             messageApi.info(info);
           };
-        if (state?.error === "no_such_user") {
-            info('账号不存在');
-        }
-        if (props.initFlag === 3) {
+        // if (state?.error === "no_such_user") {
+        //     info('账号不存在');
+        // }
+        if (props.initFlag === 2) {
             info('注册成功');
         }
     }, [props.initFlag]);
       
-    const onFinish = (values: any)=>{
-        // console.log(values);
-        navigate('/result', {state: values});
-    };
+    const onFinish = async (values: any) => {
+        try {
+          const info = (info: string) => {
+            messageApi.info(info);
+          };
+          const response = await axios.post('http://localhost:5000/users/checkAccount', values);
+          const user = response.data;
+          if(user === undefined || Object.keys(user).length === 0) {
+            info('账号不存在');
+          }
+          else {
+            navigate('/main', {state: values});
+          }
+          // TODO: 处理返回的用户数据
+        } catch (error) {
+          console.error(error);
+        }
+      };
     return(
         <div className="container">
             {contextHolder}

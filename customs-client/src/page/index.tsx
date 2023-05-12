@@ -27,7 +27,7 @@ interface MiddleDivProps {
 function MiddleDiv(props: MiddleDivProps) 
 {
     const { switch_choose, switch_login_reg } = props;
-    if(switch_choose === 0 || switch_choose === 3)
+    if(switch_choose === 0 || switch_choose === 2)
         return(<Login_form passData={switch_login_reg} initFlag={switch_choose}/>)
     else
         return(<Register passData={switch_login_reg}/>)

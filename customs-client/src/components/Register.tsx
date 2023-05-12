@@ -41,7 +41,7 @@ const Register: React.FC<RegisterProps> = (props) => {
       },
     });
     info("注册成功");
-    props.passData(3);
+    props.passData(2);
   } catch (error) {
     info("注册失败：" + error);
     console.log(error);
