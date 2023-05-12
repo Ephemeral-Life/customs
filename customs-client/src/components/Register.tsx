@@ -1,53 +1,33 @@
-import {
-  Button,
-  Form,
-  Input,
-  Radio,
-  message,
-} from 'antd';
 import React from 'react';
+import { Button, Form, Input, message} from 'antd';
+
 import './css/login.css';
-import { gql, useMutation } from '@apollo/client';
+import axios from 'axios';
+
 interface RegisterProps {
   passData: (data: number) => void;
 }
 
-const CREATE_USER = gql`
-  mutation createUser($input: CreateUserInput!) {
-    createUser(input: $input) {
-      id
-    }
-  }
-`;
-
 const Register: React.FC<RegisterProps> = (props) => {
-  const [createUser, { loading }] = useMutation(CREATE_USER);
   const [messageApi, contextHolder] = message.useMessage();
   const info = (info: string) => {
     messageApi.info(info);
   };
   const onFinish = async (values: any) => {
-  if(loading)
-      info("loading...");
-  try {
-    const { username, password, gender } = values;
-    await createUser({
-      variables: {
-        input: { 
-          username: username, 
-          password: password, 
-          gender: gender 
-        },
-      },
-    });
-    info("注册成功");
-    props.passData(2);
-  } catch (error) {
-    info("注册失败：" + error);
-    console.log(error);
-  }
-  
-};
+    try {
+      const response = await axios.post('http://localhost:5000/users/createAccount', values);
+      const user = response.data;
+      console.log(user);
+      if(user === undefined || Object.keys(user).length === 0) {
+        info('注册失败');
+      }
+      else {
+        props.passData(2)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="register">
       {contextHolder}
@@ -74,15 +54,18 @@ const Register: React.FC<RegisterProps> = (props) => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item
-          label="性别"
-          name="gender"
-          rules={[{ required: true, message: '请选择性别！' }]}
+        <Form.Item label="确认密码" name="repassword" rules={[{required: true, message: ''},
+          ({getFieldValue})=>({
+            validator(_, value){
+              if(!value || getFieldValue('password') === value){
+                return Promise.resolve()
+              }
+              return Promise.reject("两次密码输入不一致")
+            }
+          })
+        ]}
         >
-          <Radio.Group name='gender'>
-            <Radio value="male">男性</Radio>
-            <Radio value="female">女性</Radio>
-          </Radio.Group>
+	      <Input.Password/>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
           <Button type="primary" htmlType="submit">注册</Button>

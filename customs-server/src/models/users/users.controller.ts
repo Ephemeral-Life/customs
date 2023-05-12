@@ -14,10 +14,19 @@ export class UsersController {
 
   @Post("checkAccount")
   async checkAccount(@Body() data: any) {
-    console.log(data.username, data.password);
+    console.log("checkAccount:",data.username, data.password);
     if(data.username===undefined||data.password===undefined)
       return null;
     const user = await this.usersService.getUserByUsernameAndPassword(data.username, data.password);
+    return user;
+  }
+
+  @Post("createAccount")
+  async createUser(@Body() data: any) {
+    console.log("createUser:",data.username, data.password);
+    if(data.username===undefined||data.password===undefined)
+      return null;
+    const user = await this.usersService.createUserByUsernameAndPassword(data.username, data.password);
     return user;
   }
 }

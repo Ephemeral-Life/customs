@@ -8,3 +8,7 @@ type Query {
   getAllUsers: [User!]
   getUserByUsernameAndPassword(username: String!, password: String!): User
 }
+
+type Mutation {
+  createUser(username: String!, password: String!): User!
+}

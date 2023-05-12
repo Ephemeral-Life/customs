@@ -42,7 +42,6 @@ const Login_form: React.FC<LoginProps> = (props) => {
           else {
             navigate('/main', {state: values});
           }
-          // TODO: 处理返回的用户数据
         } catch (error) {
           console.error(error);
         }
