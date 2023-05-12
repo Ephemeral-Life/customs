@@ -1,13 +1,32 @@
-import { Resolver, Query } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '../users/entities/User';
+import { UsersService } from '../users/users.service';
 
 @Resolver()
 export class QueryResolver {
-  constructor(private readonly prisma: PrismaService) {} // 注入Prisma服务类
+  private readonly prisma: PrismaService
+  private readonly usersService: UsersService;
+  constructor(prisma: PrismaService, usersService: UsersService) {
+    this.prisma = prisma;
+    this.usersService = usersService;
+  }
 
-  @Query(() => [User]) // 声明该resolver函数返回类型为User数组
-  async user(): Promise<User[]> {
-    return this.prisma.user.findMany(); // 使用Prisma服务类中的findMany()函数获取所有用户数据
+  @Query(() => [User])
+  async getAllUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
+
+  @Query(() => User)
+  async getUserByUsernameAndPassword(
+    @Args('username') username: string,
+    @Args('password') password: string,
+  ): Promise<User> {
+    return this.prisma.user.findFirst({
+      where: {
+        username,
+        password
+      },
+    });
   }
 }

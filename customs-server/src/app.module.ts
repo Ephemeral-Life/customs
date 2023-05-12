@@ -6,11 +6,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { QueryResolver } from './models/graphql/query.resolver';
 import { PrismaService } from './prisma/prisma.service';
-
+import { UsersModule } from './models/users/users.module';
+import { UsersService } from './models/users/users.service';
 
 @Module({
   imports: [
-    // PostsModule,
+    UsersModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
@@ -18,6 +19,7 @@ import { PrismaService } from './prisma/prisma.service';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, QueryResolver],
+  providers: [AppService, PrismaService, QueryResolver, UsersService],
 })
 export class AppModule {}
+
