@@ -40,7 +40,7 @@ const Login_form: React.FC<LoginProps> = (props) => {
             info('账号不存在');
           }
           else {
-            navigate('/main', {state: values});
+            navigate('/main', {state: user});
           }
         } catch (error) {
           console.error(error);
