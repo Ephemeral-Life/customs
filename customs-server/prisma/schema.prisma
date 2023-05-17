@@ -15,3 +15,11 @@ model User {
   username String @unique
   password String 
 }
+
+model Sensitive_rules {
+  id Int @id @default(autoincrement())
+  sensitive_rules_name String
+  sensitive_rules_detail String
+  sensitive_rules_content String
+  sensitive_rules_create_time DateTime @default(dbgenerated("CURRENT_DATE"))
+}

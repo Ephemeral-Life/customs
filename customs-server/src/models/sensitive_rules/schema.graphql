@@ -1,0 +1,15 @@
+type Sensitive_rules {
+  id: ID!
+  sensitive_rules_name: String!
+  sensitive_rules_detail: String!
+  sensitive_rules_content: String!
+  sensitive_rules_create_time: String
+}
+
+type Query {
+  getAllSensitiveRules: [Sensitive_rules!]
+}
+
+type Mutation {
+  createSensitiveRules(sensitive_rules_name: String!, sensitive_rules_detail: String!, sensitive_rules_content: String!, sensitive_rules_create_time: String): Sensitive_rules!
+}

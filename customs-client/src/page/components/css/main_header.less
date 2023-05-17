@@ -1,0 +1,43 @@
+@import "variables.less";
+.Main_Header {
+    height: @header-height;
+    border-bottom: @border-height solid rgba(0, 0, 255, 0.584);
+    background-color: rgb(0,21,41);
+    background-size: cover;
+    .left{
+        width: 200px;
+        height: @header-height;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        float: left;
+        .left-title{
+            padding: 0px;
+            margin: 0px;
+            color: white;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+    }
+    .right{
+        width: calc(100% - 200px);
+        height: @header-height;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        float: left;
+        .right-title{
+            padding: 0px;
+            margin: 0px;
+            color: white;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+    }
+}

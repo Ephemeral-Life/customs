@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Header from "components/Header";
-import Login_form from "components/Login_form";
-import Bottom from "components/Bottom";
-import Register from 'components/Register';
+import Header from "./components/Header";
+import Login_form from "./components/Login_form";
+import Bottom from "./components/Bottom";
+import Register from './components/Register';
 
 
 export default function Index() {
