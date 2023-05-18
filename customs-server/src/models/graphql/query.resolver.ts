@@ -1,9 +1,10 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '../users/entities/User';
 import { UsersService } from '../users/users.service';
 import { sensitive_rules } from '../sensitive_rules/entities/sensitive_rules';
 import { SensitiveService } from '../sensitive_rules/sensitive.service';
+
 @Resolver()
 export class QueryResolver {
   private readonly prisma: PrismaService
@@ -17,25 +18,32 @@ export class QueryResolver {
 
   @Query(() => [User])
   async getAllUsers(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.usersService.findAll();
   }
 
   @Query(() => User)
-  async getUserByUsernameAndPassword(
-    @Args('username') username: string,
-    @Args('password') password: string,
-  ): Promise<User> {
-    return this.prisma.user.findFirst({
-      where: {
-        username,
-        password
-      },
-    });
+  async getUserByUsernameAndPassword(@Args('username') username: string, @Args('password') password: string): Promise<User> {
+    return this.usersService.getUserByUsernameAndPassword(username, password)
+  }
+  
+  @Mutation(() => User)
+  async createUserByUsernameAndPassword(@Args('username') username: string, @Args('password') password: string): Promise<User> {
+    return this.usersService.createUserByUsernameAndPassword(username, password)
   }
 
   @Query(() => [sensitive_rules])
   async getAllSensitiveRules(): Promise<sensitive_rules[]> {
-    return this.prisma.sensitive_rules.findMany();
+    return this.sensitiveService.findAllSensitiveRules();
+  }
+
+  @Query(() => [sensitive_rules])
+  async getAllSensitiveRulesBySensitive_rules_detail(@Args('sensitive_rules_detail') sensitive_rules_detail: string): Promise<sensitive_rules[]> {
+    return this.sensitiveService.getAllSensitiveRulesBySensitive_rules_detail(sensitive_rules_detail);
+  }
+
+  @Mutation(() => sensitive_rules)
+  async deleteSensitiveRuleById(@Args('id') id: number): Promise<sensitive_rules> {
+    return this.sensitiveService.deleteSensitiveRuleById(id);
   }
 
 }

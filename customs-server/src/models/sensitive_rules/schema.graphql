@@ -1,5 +1,5 @@
 type Sensitive_rules {
-  id: ID!
+  id: Int!
   sensitive_rules_name: String!
   sensitive_rules_detail: String!
   sensitive_rules_content: String!
@@ -10,6 +10,14 @@ type Query {
   getAllSensitiveRules: [Sensitive_rules!]
 }
 
+type Query {
+  getAllSensitiveRulesBySensitive_rules_detail(sensitive_rules_detail: String!): [Sensitive_rules!]
+}
+
 type Mutation {
   createSensitiveRules(sensitive_rules_name: String!, sensitive_rules_detail: String!, sensitive_rules_content: String!, sensitive_rules_create_time: String): Sensitive_rules!
+}
+
+type Mutation {
+  deleteSensitiveRuleById(id: Int!): Sensitive_rules!
 }

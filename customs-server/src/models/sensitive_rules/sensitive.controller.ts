@@ -8,7 +8,12 @@ export class SensitiveController {
 
   @Get("allSensitiveRules")
   getAllUsers(): Promise<sensitive_rules[]> {
-    return this.sensitiveService.findAll();
+    return this.sensitiveService.findAllSensitiveRules();
+  }
+
+  @Get("deleteSensitiveRuleById")
+  deleteSensitiveRuleById(): Promise<sensitive_rules> {
+    return null
   }
 
 //   @Post("createSensitiveRules")

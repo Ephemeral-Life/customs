@@ -2,21 +2,28 @@ import React from 'react';
 import { Button, Form, Input, message} from 'antd';
 
 import './css/login.css';
-import axios from 'axios';
+import { useApolloClient } from '@apollo/client';
+import { createUserByUsernameAndPassword } from 'mutations';
 
 interface RegisterProps {
   passData: (data: number) => void;
 }
 
 const Register: React.FC<RegisterProps> = (props) => {
+  const client = useApolloClient();
   const [messageApi, contextHolder] = message.useMessage();
   const info = (info: string) => {
     messageApi.info(info);
   };
   const onFinish = async (values: any) => {
     try {
-      const response = await axios.post('http://localhost:5000/users/createAccount', values);
-      const user = response.data;
+      const { data } = await client.mutate({
+        mutation: createUserByUsernameAndPassword,
+        variables: values,
+      });
+      console.log(values);
+      // const response = await axios.post('http://localhost:5000/users/createAccount', values);
+      const user = data.createUserByUsernameAndPassword;
       console.log(user);
       if(user === undefined || Object.keys(user).length === 0) {
         info('注册失败');
@@ -25,6 +32,7 @@ const Register: React.FC<RegisterProps> = (props) => {
         props.passData(2)
       }
     } catch (error) {
+      info('注册失败');
       console.error(error);
     }
   };

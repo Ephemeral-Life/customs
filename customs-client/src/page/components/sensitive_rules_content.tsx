@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './css/main.css';
-import { Button, Col, Form, Layout, Row, Select, Statistic, Table, theme } from 'antd';
+import { Button, Col, Form, Layout, Popconfirm, Row, Select, Statistic, Table, message, theme } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import CountUp from 'react-countup';
 import { valueType } from 'antd/es/statistic/utils';
-import axios from 'axios';
+import { useApolloClient } from '@apollo/client';
+import { deleteSensitiveRuleById, getAllSensitiveRules, getAllSensitiveRulesBySensitive_rules_detail } from 'mutations';
 
 type sensitive_rules_record={
     id: number;
@@ -15,70 +16,129 @@ type sensitive_rules_record={
 }
 const { Content } = Layout;
 
-const columns = [
-  {
-      title: '序号',
-      dataIndex: 'id',
-      key: 'id',
-  },
-  {
-    title: '敏感规则名称',
-    dataIndex: 'sensitive_rules_name',
-    key: 'sensitive_rules_name',
-  },
-  {
-      title: '所属行业详情',
-      dataIndex: 'sensitive_rules_detail',
-      key: 'sensitive_rules_detail',
-  },
-  {
-      title:'敏感规则内容',
-      dataIndex:'sensitive_rules_content',
-      key:'sensitive_rules_content',
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'sensitive_rules_create_time',
-    key: 'sensitive_rules_create_time',
-  },
-  {
-    title: '操作',
-    render: (record: sensitive_rules_record) => (
-      <span>
-        <Button type="link" onClick={() => handleEdit(record)}>修改</Button>
-        <Button type="link" onClick={() => handleDelete(record)}>删除</Button>
-      </span>
-    ),
-    key: 'actions',
-  },
-];
-
-const handleEdit = (record: sensitive_rules_record)=>{
-    console.log(record)
-}
-const handleDelete = (record: sensitive_rules_record)=>{
-    console.log(record)
-}
 const Sensitive_rules_content: React.FC = () => {
   const [industryOptions, setIndustryOptions] = useState<string[]>([]);
   const [dataSource, setDataSource] = useState([]);
-  useEffect(() => {
-    axios.get('http://localhost:5000/SensitiveRules/allSensitiveRules')
-    .then(response => {
-      const transformedData = response.data.map((item: sensitive_rules_record) => ({
+  const client = useApolloClient();
+
+  const handleEdit = (record: sensitive_rules_record)=>{
+    console.log(record)
+  }
+
+  const handleDelete = async (record: sensitive_rules_record) => {
+    try {
+      await client.mutate({
+        mutation: deleteSensitiveRuleById,
+        variables: {id: record.id},
+      });
+      console.log('Record deleted successfully');
+    } catch (error) {
+      console.error('Error deleting record:', error);
+    }
+  };
+
+  const confirm = (record: sensitive_rules_record, e?: React.MouseEvent<HTMLElement>) => {
+    console.log(e);
+    handleDelete(record);
+    window.location.reload();
+    message.success('删掉了');
+  };
+  
+  const cancel = (e?: React.MouseEvent<HTMLElement>) => {
+    console.log(e);
+  };
+  const columns = [
+    {
+        title: '序号',
+        dataIndex: 'id',
+        key: 'id',
+        width: 130,
+    },
+    {
+      title: '敏感规则名称',
+      dataIndex: 'sensitive_rules_name',
+      key: 'sensitive_rules_name',
+      width: 255,
+    },
+    {
+        title: '所属行业详情',
+        dataIndex: 'sensitive_rules_detail',
+        key: 'sensitive_rules_detail',
+        width: 255,
+    },
+    {
+        title:'敏感规则内容',
+        dataIndex:'sensitive_rules_content',
+        key:'sensitive_rules_content',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'sensitive_rules_create_time',
+      key: 'sensitive_rules_create_time',
+      width: 255,
+    },
+    {
+      title: '操作',
+      render: (record: sensitive_rules_record) => (
+        <span>
+          <Button type="link" onClick={() => handleEdit(record)}>修改</Button>
+          <Popconfirm
+            title="删除记录"
+            description="确定要删吗"
+            onConfirm={()=>confirm(record)}
+            onCancel={cancel}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link">删除</Button>
+          </Popconfirm>
+        </span>
+      ),
+      key: 'actions',
+      width: 255,
+    },
+  ];
+
+  const fetchData = async () => {
+    try {
+      const { data } = await client.query({
+        query: getAllSensitiveRules,
+      });
+      const sensitiveRules = data.getAllSensitiveRules;
+      const transformedData = sensitiveRules.map((item: sensitive_rules_record) => ({
         ...item,
         key: item.id.toString(),
-        sensitive_rules_create_time: item.sensitive_rules_create_time.substring(0, 10),
       }));
-      const industryDetails = response.data.map((item: any) => item.sensitive_rules_detail);
+      const industryDetails = ['全部', ...sensitiveRules.map((item: any) => item.sensitive_rules_detail)];
       setIndustryOptions(industryDetails);
       setDataSource(transformedData);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error(error);
-    });
-  },[])
-  
+    }
+  };
+  const handleFilter = async (values: any) => {
+    if(values.filter === "全部")
+      fetchData()
+    else{
+      try {
+        const { data } = await client.query({
+          query: getAllSensitiveRulesBySensitive_rules_detail,
+          variables: {sensitive_rules_detail: values.filter}
+        });
+        const sensitiveRules = data.getAllSensitiveRulesBySensitive_rules_detail;
+        const transformedData = sensitiveRules.map((item: sensitive_rules_record) => ({
+          ...item,
+          key: item.id.toString(),
+        }));
+        setDataSource(transformedData);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -106,8 +166,9 @@ const Sensitive_rules_content: React.FC = () => {
                     layout="inline"
                     style={{ maxWidth: 1000 }}
                     className='info_select_container'
+                    onFinish={handleFilter}
                     >
-                        <Form.Item label="" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} className='info_select_select'>
+                        <Form.Item label="" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} className='info_select_select' name="filter">
                             <Select placeholder="请选择行业详情信息">
                               {industryOptions.map((option: string) => (
                                 <Select.Option key={option} value={option}>{option}</Select.Option>

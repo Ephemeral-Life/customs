@@ -3,7 +3,8 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import './css/login.css';
 import { useNavigate } from'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { useApolloClient } from '@apollo/client';
+import { getUserByUsernameAndPassword } from 'mutations';
 interface LoginProps {
     passData: (data: number) => void;
     initFlag: number
@@ -12,6 +13,7 @@ type reload = {
     error: string;
 }
 const Login_form: React.FC<LoginProps> = (props) => {
+    const client = useApolloClient();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const location = useLocation();
@@ -34,8 +36,11 @@ const Login_form: React.FC<LoginProps> = (props) => {
           const info = (info: string) => {
             messageApi.info(info);
           };
-          const response = await axios.post('http://localhost:5000/users/checkAccount', values);
-          const user = response.data;
+          const { data } = await client.query({
+            query: getUserByUsernameAndPassword,
+            variables: values,
+          });
+          const user = data.getUserByUsernameAndPassword;
           if(user === undefined || Object.keys(user).length === 0) {
             info('账号不存在');
           }
