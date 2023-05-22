@@ -23,10 +23,10 @@ const Main_Content: React.FC<handleSwitch> = (props) => {
         src = './components/sensitive_rules_content';
         break;
       case '2':
-        src = 'https://example.com/item2';
+        src = 'https://example.com/';
         break;
       case '3':
-        src = 'https://example.com/item3';
+        src = 'https://example.com/';
         break;
       // 添加其他菜单项的处理逻辑
       default:

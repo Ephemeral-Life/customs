@@ -46,4 +46,14 @@ export class QueryResolver {
     return this.sensitiveService.deleteSensitiveRuleById(id);
   }
 
+  @Mutation(() => sensitive_rules)
+  async createSensitiveRule(@Args('sensitive_rules_name') sensitive_rules_name: string, @Args('sensitive_rules_detail') sensitive_rules_detail: string, @Args('sensitive_rules_content') sensitive_rules_content: string ){
+    return this.sensitiveService.createSensitiveRule(sensitive_rules_name, sensitive_rules_detail, sensitive_rules_content)
+  }
+
+  @Mutation(() => sensitive_rules)
+  async changeSensitiveRule(@Args('id') id: number, @Args('sensitive_rules_name') sensitive_rules_name: string, @Args('sensitive_rules_detail') sensitive_rules_detail: string, @Args('sensitive_rules_content') sensitive_rules_content: string ){
+    return this.sensitiveService.changeSensitiveRule(id, sensitive_rules_name, sensitive_rules_detail, sensitive_rules_content)
+  }
+
 }

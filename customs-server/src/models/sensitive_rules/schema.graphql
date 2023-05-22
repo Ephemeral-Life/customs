@@ -15,9 +15,13 @@ type Query {
 }
 
 type Mutation {
-  createSensitiveRules(sensitive_rules_name: String!, sensitive_rules_detail: String!, sensitive_rules_content: String!, sensitive_rules_create_time: String): Sensitive_rules!
+  createSensitiveRule(sensitive_rules_name: String!, sensitive_rules_detail: String!, sensitive_rules_content: String!, sensitive_rules_create_time: String): Sensitive_rules!
 }
 
 type Mutation {
   deleteSensitiveRuleById(id: Int!): Sensitive_rules!
+}
+
+type Mutation {
+  changeSensitiveRule(id: Int!, sensitive_rules_name: String!, sensitive_rules_detail: String!, sensitive_rules_content: String!, sensitive_rules_create_time: String): Sensitive_rules!
 }

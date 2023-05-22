@@ -48,3 +48,9 @@
 .main_iframe {
   height: calc(100vh - 6vh - 2px);
 }
+.InputFormLayout {
+  z-index: 10;
+  position: fixed;
+  width: calc(100% - 32px);
+  bottom: 0;
+}

@@ -21,11 +21,25 @@ export const createUserByUsernameAndPassword = gql`
 `;
 
 export const createSensitiveRule = gql`
-  mutation createSensitiveRule($input: CreateSensitiveRuleInput!) {
-    createSensitiveRule(input: $input) {
+  mutation createSensitiveRule($sensitive_rules_name: String!, $sensitive_rules_detail: String!, $sensitive_rules_content: String!) {
+    createSensitiveRule(sensitive_rules_name: $sensitive_rules_name, sensitive_rules_detail: $sensitive_rules_detail, sensitive_rules_content: $sensitive_rules_content) {
       id
-      keyword
-      replace_word
+      sensitive_rules_name
+      sensitive_rules_detail
+      sensitive_rules_content
+      sensitive_rules_create_time
+    }
+  }
+`;
+
+export const changeSensitiveRule = gql`
+  mutation changeSensitiveRule($id: Int!, $sensitive_rules_name: String!, $sensitive_rules_detail: String!, $sensitive_rules_content: String!) {
+    changeSensitiveRule(id: $id, sensitive_rules_name: $sensitive_rules_name, sensitive_rules_detail: $sensitive_rules_detail, sensitive_rules_content: $sensitive_rules_content) {
+      id
+      sensitive_rules_name
+      sensitive_rules_detail
+      sensitive_rules_content
+      sensitive_rules_create_time
     }
   }
 `;

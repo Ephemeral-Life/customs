@@ -22,7 +22,6 @@ const Register: React.FC<RegisterProps> = (props) => {
         variables: values,
       });
       console.log(values);
-      // const response = await axios.post('http://localhost:5000/users/createAccount', values);
       const user = data.createUserByUsernameAndPassword;
       console.log(user);
       if(user === undefined || Object.keys(user).length === 0) {
